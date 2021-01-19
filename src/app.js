@@ -1,20 +1,25 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
+//const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const app = express()
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+const tripsRouter = require('./trips/trips-router')
 
 app.use(morgan(morganSetting))
 app.use(helmet())
-app.use(cors())
+//const cors = require('cors');
+const {CLIENT_ORIGIN} = require('./config');
 
+app.use('/api/trips', tripsRouter)
+
+/*
 app.get('/', (req, res) => {
     res.send('Hello, world!')
 })
-
+*/
 
 app.use(function errorHandler(error, req, res, next) {
    let response

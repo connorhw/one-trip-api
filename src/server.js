@@ -1,8 +1,24 @@
 const app = require('./app')
+const PORT = process.env.PORT || 3000;
+const cors = require('cors')
+const {CLIENT_ORIGIN} = require('./config')
+const knex = require('knex')
+const {DB_URL} = require('./config')
+//const { PORT } = require('./config')
 
+const db = knex({
+  client: 'pg',
+  connection: DB_URL,
+})
 
-const { PORT } = require('./config')
+app.use(
+  cors({
+      origin: CLIENT_ORIGIN
+  })
+);
+
+app.set('db', db)
 
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`)
+  console.log(`Server listening at http://localhost:${PORT} for one-trip-api.`)
 })
