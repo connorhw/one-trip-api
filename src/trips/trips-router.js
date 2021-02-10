@@ -49,6 +49,58 @@ tripsRouter
     })
 
 tripsRouter
+    .route('/:id')
+    //.all(requireAuth)
+    .all((req, res, next) => {
+        TripsService.getById(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(trip => {
+                if(!trip) {
+                    return res.status(404).json({
+                        error: { message: `Trip does not exist`}
+                    })
+                }
+                res.trip = trip
+                next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json(serializeTrip(res.trip))
+    })
+    .delete((req, res, next) => {
+        TripsService.deleteTrip(
+            req.app.get('db'),
+            req.params.id
+        )
+        .then(numRowsAffected => {
+            res.status(204).end()
+        })
+        .catch(next)
+    })
+    .patch(jsonParser, (req, res, next) => {
+        const { trip_name, places, fav_part, journal } = req.body
+        const tripToUpdate = { trip_name, places, fav_part, journal }
+
+        const numberOfValues = Object.values(tripToUpdate).filter(Boolean).length
+        if (numberOfValues === 0)
+            return res.status(400).json({
+                error: {
+                    message: `Request body must contain a new value for at least one of the trip page values`
+                }
+            })
+        TripsService.updateTrip(
+            req.app.get('db'),
+            req.params.id,
+            tripToUpdate
+        )
+        .then(numRowsAffected => {
+            res.status(204).end()
+        })
+        .catch(next)
+    })
 
 
 module.exports = tripsRouter
