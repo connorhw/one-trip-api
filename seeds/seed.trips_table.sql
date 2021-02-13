@@ -2,8 +2,8 @@ BEGIN;
 
 TRUNCATE
     trips_table,
-    trips_users,
-    RESTART IDENTITY CASCADE;
+    trips_users;
+    /* RESTART IDENTITY CASCADE; */
     
 INSERT INTO trips_table (trip_name, places, fav_part, total_cost, journal)
 VALUES
