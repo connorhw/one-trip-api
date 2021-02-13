@@ -21,7 +21,7 @@ VALUES
     ('Connor', 'Wong', 'connorwong@gmail.com', 'connorhw', 'password1'),
     ('Ellen', 'Fung', 'ellenfung@yahoo.com', 'mellen', 'password2'),
     ('Luke', 'Chiang', 'lukechiang@comcast.net', 'lukey', 'password3'),
-    ('Holly', 'Lee', 'hollylee@hotmail.com', 'hollytamalee', 'password4'),
+    ('Holly', 'Lee', 'hollylee@hotmail.com', 'tamalee', 'password4'),
     ('Pickles', 'n/a', 'lilmisspickles@ig.com', 'lilmisspickles', 'password5');
 
 COMMIT;
