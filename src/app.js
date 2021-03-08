@@ -7,6 +7,20 @@ const { NODE_ENV } = require('./config')
 const app = express()
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 const tripsRouter = require('./trips/trips-router')
+const winston = require('winston');
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'info.log' })
+  ]
+});
+
+if (NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
 
 app.use(morgan(morganSetting))
 app.use(cors())
