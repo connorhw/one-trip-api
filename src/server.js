@@ -10,14 +10,15 @@ const db = knex({
   client: 'pg',
   connection: DB_URL,
 })
-app.use(cors())
-/*
+
+//app.use(cors())
+
 app.use(
   cors({
       origin: CLIENT_ORIGIN
   })
 );
-*/
+
 app.set('db', db)
 
 app.listen(PORT, () => {

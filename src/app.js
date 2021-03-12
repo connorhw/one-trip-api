@@ -21,6 +21,7 @@ if (NODE_ENV !== 'production') {
     format: winston.format.simple()
   }));
 }
+
 app.use(function validateBearerToken(req, res, next) {
   const apiToken = process.env.API_TOKEN
   const authToken = req.get('Authorization')
@@ -37,21 +38,11 @@ app.use(morgan(morganSetting))
 app.use(cors())
 app.use(helmet())
 app.use(express.json())
-//const cors = require('cors');
+
 //const {CLIENT_ORIGIN} = require('./config');
 
-/*
-app.get('/trips', (req, res, next) => {
-   res.send('All Trips')
-})
-*/
-app.use('/api/trips', tripsRouter)
 
-/*
-app.get('/', (req, res) => {
-    res.send('Hello, world!')
-})
-*/
+app.use('/api/trips', tripsRouter)
 
 app.use(function errorHandler(error, req, res, next) {
    let response
