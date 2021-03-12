@@ -13,6 +13,7 @@ const db = knex({
 
 //app.use(cors())
 
+
 app.use(
   cors({
       origin: CLIENT_ORIGIN

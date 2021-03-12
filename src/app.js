@@ -4,10 +4,12 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
+
 const app = express()
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 const tripsRouter = require('./trips/trips-router')
 const winston = require('winston');
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
@@ -30,7 +32,6 @@ app.use(function validateBearerToken(req, res, next) {
     logger.error(`Unauthorized request to path: ${req.path}`);
     return res.status(401).json({ error: 'Unauthorized request' })
   }
-  // move to the next middleware
   next()
 })
 
