@@ -41,8 +41,11 @@ app.use(helmet())
 app.use(express.json())
 
 //const {CLIENT_ORIGIN} = require('./config');
-
-
+/*
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin": "*")
+}) 
+*/
 app.use('/api/trips', tripsRouter)
 
 app.use(function errorHandler(error, req, res, next) {
