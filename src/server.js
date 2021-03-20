@@ -1,9 +1,10 @@
 const app = require('./app')
 const cors = require('cors')
-const {CLIENT_ORIGIN} = require('./config')
+//const {CLIENT_ORIGIN} = require('./config')
 const knex = require('knex')
 const { PORT, DB_URL } = require('./config')
 
+require('dotenv').config();
 
 const db = knex({
   client: 'pg',
@@ -13,10 +14,10 @@ const db = knex({
 
 app.use(
   cors({
-      origin: CLIENT_ORIGIN
+      origin: process.env.CLIENT_ORIGIN
   })
 );
-
+console.log('here server here')
 app.set('db', db)
 
 app.listen(PORT, () => {
