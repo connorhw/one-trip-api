@@ -3,7 +3,6 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
 
 const app = express()
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
@@ -18,12 +17,12 @@ const logger = winston.createLogger({
   ]
 });
 
-if (NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
     format: winston.format.simple()
   }));
 }
-
+/*
 app.use(function validateBearerToken(req, res, next) {
   const apiToken = process.env.API_TOKEN
   const authToken = req.get('Authorization')
@@ -34,18 +33,17 @@ app.use(function validateBearerToken(req, res, next) {
   }
   next()
 })
-
+*/
 app.use(morgan(morganSetting))
-app.use(cors())
 app.use(helmet())
 app.use(express.json())
 
-//const {CLIENT_ORIGIN} = require('./config');
-/*
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin": "*")
-}) 
-*/
+app.use(
+  cors({
+      origin: process.env.CLIENT_ORIGIN
+  })
+);
+
 app.use('/api/trips', tripsRouter)
 
 app.get('/', (req, res) => {
@@ -55,7 +53,7 @@ app.get('/', (req, res) => {
 app.use(function errorHandler(error, req, res, next) {
    let response
    //if (process.env.NODE_ENV === 'production') {
-   if (NODE_ENV === 'production') {
+   if (process.env.NODE_ENV === 'production') {
      response = { error: { message: 'server error' } }
    } else {
      console.error(error)
