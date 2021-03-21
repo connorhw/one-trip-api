@@ -3,27 +3,57 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
 
 const app = express()
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+const tripsRouter = require('./trips/trips-router')
+const winston = require('winston');
 
-//const morganOption = (process.env.NODE_ENV === 'production')
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'info.log' })
+  ]
+});
 
-app.use(morgan(morganOption))
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple()
+  }));
+}
+/*
+app.use(function validateBearerToken(req, res, next) {
+  const apiToken = process.env.API_TOKEN
+  const authToken = req.get('Authorization')
+
+  if (!authToken || authToken.split(' ')[1] !== apiToken) {
+    logger.error(`Unauthorized request to path: ${req.path}`);
+    return res.status(401).json({ error: 'Unauthorized request' })
+  }
+  next()
+})
+*/
+app.use(morgan(morganSetting))
 app.use(helmet())
-app.use(cors())
+app.use(express.json())
+
+app.use(
+  cors({
+      origin: process.env.CLIENT_ORIGIN
+  })
+);
+
+app.use('/api/trips', tripsRouter)
 
 app.get('/', (req, res) => {
-    res.send('Hello, world!')
+  res.send('Hello, world!')
 })
 
 app.use(function errorHandler(error, req, res, next) {
    let response
    //if (process.env.NODE_ENV === 'production') {
-   if (NODE_ENV === 'production') {
+   if (process.env.NODE_ENV === 'production') {
      response = { error: { message: 'server error' } }
    } else {
      console.error(error)

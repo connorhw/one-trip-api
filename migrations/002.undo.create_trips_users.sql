@@ -1,0 +1,4 @@
+ALTER TABLE trips_users
+    DROP COLUMN IF EXISTS user_id;
+
+DROP TABLE IF EXISTS trips_users CASCADE;
