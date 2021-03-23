@@ -22,7 +22,17 @@ if (process.env.NODE_ENV !== 'production') {
     format: winston.format.simple()
   }));
 }
-/*
+
+app.use(morgan(morganSetting))
+app.use(helmet())
+app.use(express.json())
+
+app.use(
+  cors({
+      origin: process.env.CLIENT_ORIGIN
+  })
+);
+
 app.use(function validateBearerToken(req, res, next) {
   const apiToken = process.env.API_TOKEN
   const authToken = req.get('Authorization')
@@ -33,16 +43,6 @@ app.use(function validateBearerToken(req, res, next) {
   }
   next()
 })
-*/
-app.use(morgan(morganSetting))
-app.use(helmet())
-app.use(express.json())
-
-app.use(
-  cors({
-      origin: process.env.CLIENT_ORIGIN
-  })
-);
 
 app.use('/api/trips', tripsRouter)
 

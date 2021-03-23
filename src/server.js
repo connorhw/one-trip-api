@@ -12,7 +12,11 @@ const db = knex({
 })
 
 
-app.use(cors())
+app.use(
+  cors({
+      origin: process.env.CLIENT_ORIGIN
+  })
+);
 app.set('db', db)
 
 const PORT = process.env.PORT || 1337;
